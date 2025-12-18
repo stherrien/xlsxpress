@@ -113,13 +113,7 @@ impl Writer {
     ///
     /// Returns error if cell cannot be written or if row/col exceed Excel limits.
     #[allow(clippy::cast_possible_truncation)]
-    pub fn write_number(
-        &mut self,
-        sheet: usize,
-        row: usize,
-        col: usize,
-        value: f64,
-    ) -> Result<()> {
+    pub fn write_number(&mut self, sheet: usize, row: usize, col: usize, value: f64) -> Result<()> {
         let worksheet = self.workbook.worksheet_from_index(sheet)?;
         worksheet.write_number(row as u32, col as u16, value)?;
         Ok(())
@@ -202,11 +196,8 @@ impl Writer {
         value: NaiveDateTime,
     ) -> Result<()> {
         let worksheet = self.workbook.worksheet_from_index(sheet)?;
-        let excel_date = ExcelDateTime::from_ymd(
-            value.year() as u16,
-            value.month() as u8,
-            value.day() as u8,
-        )?;
+        let excel_date =
+            ExcelDateTime::from_ymd(value.year() as u16, value.month() as u8, value.day() as u8)?;
         let excel_datetime = excel_date.and_hms(
             value.hour() as u16,
             value.minute() as u8,
@@ -254,13 +245,7 @@ impl Writer {
     ///
     /// Returns error if cell cannot be written or if row/col exceed Excel limits.
     #[allow(clippy::cast_possible_truncation)]
-    pub fn write_url(
-        &mut self,
-        sheet: usize,
-        row: usize,
-        col: usize,
-        url: &str,
-    ) -> Result<()> {
+    pub fn write_url(&mut self, sheet: usize, row: usize, col: usize, url: &str) -> Result<()> {
         let worksheet = self.workbook.worksheet_from_index(sheet)?;
         worksheet.write_url(row as u32, col as u16, url)?;
         Ok(())
@@ -692,12 +677,7 @@ impl Writer {
     }
 
     /// Helper to insert chart into worksheet
-    fn insert_chart(
-        &mut self,
-        sheet: usize,
-        chart: &Chart,
-        line_chart: &LineChart,
-    ) -> Result<()> {
+    fn insert_chart(&mut self, sheet: usize, chart: &Chart, line_chart: &LineChart) -> Result<()> {
         use crate::charts::Chart as ChartTrait;
 
         let worksheet = self.workbook.worksheet_from_index(sheet)?;
@@ -888,7 +868,11 @@ mod tests {
         let result = writer.add_worksheet("Sheet1");
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to add worksheet: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to add worksheet: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test writing a string cell
@@ -969,7 +953,11 @@ mod tests {
         let result = writer.write_boolean(0, 0, 0, true);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to write boolean: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to write boolean: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test writing a boolean cell (false)
@@ -983,7 +971,11 @@ mod tests {
         let result = writer.write_boolean(0, 0, 1, false);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to write boolean: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to write boolean: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test writing a date cell
@@ -1016,7 +1008,11 @@ mod tests {
         let result = writer.write_datetime(0, 0, 1, datetime);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to write datetime: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to write datetime: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test writing a formula cell
@@ -1030,7 +1026,11 @@ mod tests {
         let result = writer.write_formula(0, 0, 2, "=A1+B1");
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to write formula: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to write formula: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test writing a complex formula
@@ -1044,7 +1044,11 @@ mod tests {
         let result = writer.write_formula(0, 0, 2, "=SUM(A1:A10)");
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to write complex formula: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to write complex formula: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test writing a URL/hyperlink
@@ -1069,10 +1073,15 @@ mod tests {
         writer.add_worksheet("Sheet1").unwrap();
 
         // Act: Write URL with custom text to cell A1
-        let result = writer.write_url_with_text(0, 0, 0, "https://www.rust-lang.org", "Rust Website");
+        let result =
+            writer.write_url_with_text(0, 0, 0, "https://www.rust-lang.org", "Rust Website");
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to write URL with text: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to write URL with text: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test writing a styled string cell
@@ -1091,7 +1100,11 @@ mod tests {
         let result = writer.write_string_with_style(0, 0, 0, "Bold Text", &style);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to write styled string: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to write styled string: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test writing a styled number cell
@@ -1110,13 +1123,19 @@ mod tests {
         let result = writer.write_number_with_style(0, 0, 1, 1234.56, &style);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to write styled number: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to write styled number: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test writing with complex style
     #[test]
     fn test_write_with_complex_style() {
-        use crate::styles::{Alignment, Border, BorderStyle, Fill, Font, HorizontalAlignment, Style};
+        use crate::styles::{
+            Alignment, Border, BorderStyle, Fill, Font, HorizontalAlignment, Style,
+        };
 
         // Arrange: Create workbook and add worksheet
         let mut writer = Writer::new();
@@ -1133,7 +1152,11 @@ mod tests {
         let result = writer.write_string_with_style(0, 0, 0, "Styled", &style);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to write complex styled cell: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to write complex styled cell: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test inserting a line chart
@@ -1150,19 +1173,21 @@ mod tests {
         writer.write_number(0, 1, 1, 100.0).unwrap();
 
         // Create a line chart
-        let chart = LineChart::new()
-            .title("Monthly Sales")
-            .add_series(
-                DataSeries::new("Sheet1!$B$2:$B$2")
-                    .name("Sales")
-                    .categories("Sheet1!$A$2:$A$2"),
-            );
+        let chart = LineChart::new().title("Monthly Sales").add_series(
+            DataSeries::new("Sheet1!$B$2:$B$2")
+                .name("Sales")
+                .categories("Sheet1!$A$2:$A$2"),
+        );
 
         // Act: Insert chart
         let result = writer.insert_line_chart(0, &chart);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to insert line chart: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to insert line chart: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test inserting a column chart
@@ -1179,19 +1204,21 @@ mod tests {
         writer.write_number(0, 1, 1, 1000.0).unwrap();
 
         // Create a column chart
-        let chart = ColumnChart::new()
-            .title("Quarterly Revenue")
-            .add_series(
-                DataSeries::new("Sheet1!$B$2:$B$2")
-                    .name("Revenue")
-                    .categories("Sheet1!$A$2:$A$2"),
-            );
+        let chart = ColumnChart::new().title("Quarterly Revenue").add_series(
+            DataSeries::new("Sheet1!$B$2:$B$2")
+                .name("Revenue")
+                .categories("Sheet1!$A$2:$A$2"),
+        );
 
         // Act: Insert chart
         let result = writer.insert_column_chart(0, &chart);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to insert column chart: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to insert column chart: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test inserting a bar chart
@@ -1208,19 +1235,21 @@ mod tests {
         writer.write_number(0, 1, 1, 50000.0).unwrap();
 
         // Create a bar chart
-        let chart = BarChart::new()
-            .title("Department Budget")
-            .add_series(
-                DataSeries::new("Sheet1!$B$2:$B$2")
-                    .name("Budget")
-                    .categories("Sheet1!$A$2:$A$2"),
-            );
+        let chart = BarChart::new().title("Department Budget").add_series(
+            DataSeries::new("Sheet1!$B$2:$B$2")
+                .name("Budget")
+                .categories("Sheet1!$A$2:$A$2"),
+        );
 
         // Act: Insert chart
         let result = writer.insert_bar_chart(0, &chart);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to insert bar chart: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to insert bar chart: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test inserting a pie chart
@@ -1239,19 +1268,21 @@ mod tests {
         writer.write_number(0, 2, 1, 25.0).unwrap();
 
         // Create a pie chart
-        let chart = PieChart::new()
-            .title("Market Share")
-            .add_series(
-                DataSeries::new("Sheet1!$B$2:$B$3")
-                    .name("Products")
-                    .categories("Sheet1!$A$2:$A$3"),
-            );
+        let chart = PieChart::new().title("Market Share").add_series(
+            DataSeries::new("Sheet1!$B$2:$B$3")
+                .name("Products")
+                .categories("Sheet1!$A$2:$A$3"),
+        );
 
         // Act: Insert chart
         let result = writer.insert_pie_chart(0, &chart);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to insert pie chart: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to insert pie chart: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test inserting a scatter chart
@@ -1284,7 +1315,11 @@ mod tests {
         let result = writer.insert_scatter_chart(0, &chart);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to insert scatter chart: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to insert scatter chart: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test inserting an area chart
@@ -1317,7 +1352,11 @@ mod tests {
         let result = writer.insert_area_chart(0, &chart);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to insert area chart: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to insert area chart: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test inserting a doughnut chart
@@ -1390,7 +1429,10 @@ mod tests {
         let result = writer.insert_line_chart(0, &chart);
 
         // Assert: Should succeed
-        assert!(result.is_ok(), "Failed to insert chart with multiple series: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to insert chart with multiple series: {:?}",
+            result.err()
+        );
     }
-
 }

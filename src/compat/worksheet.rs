@@ -114,20 +114,20 @@ impl Worksheet {
         let col_idx = column - 1;
 
         // Get cell value from range
-        let value = self
-            .range
-            .get((row_idx, col_idx))
-            .map_or(CellValue::Empty, |data| match data {
-                Data::String(s) => CellValue::String(s.clone()),
-                Data::Float(f) => CellValue::Number(*f),
-                Data::Int(i) => CellValue::Number(*i as f64),
-                Data::Bool(b) => CellValue::Boolean(*b),
-                Data::Empty
-                | Data::Error(_)
-                | Data::DateTime(_)
-                | Data::DateTimeIso(_)
-                | Data::DurationIso(_) => CellValue::Empty,
-            });
+        let value =
+            self.range
+                .get((row_idx, col_idx))
+                .map_or(CellValue::Empty, |data| match data {
+                    Data::String(s) => CellValue::String(s.clone()),
+                    Data::Float(f) => CellValue::Number(*f),
+                    Data::Int(i) => CellValue::Number(*i as f64),
+                    Data::Bool(b) => CellValue::Boolean(*b),
+                    Data::Empty
+                    | Data::Error(_)
+                    | Data::DateTime(_)
+                    | Data::DateTimeIso(_)
+                    | Data::DurationIso(_) => CellValue::Empty,
+                });
 
         Ok(Cell::new(row, column, value))
     }

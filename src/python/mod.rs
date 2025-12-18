@@ -1,6 +1,6 @@
 //! Python bindings module
 //!
-//! Provides Python bindings for the XlsXpress library using PyO3.
+//! Provides Python bindings for the `XlsXpress` library using `PyO3`.
 
 pub mod bindings;
 // TODO: Fix compilation errors in these modules before re-enabling
@@ -15,7 +15,7 @@ use pyo3::prelude::*;
 // pub use styles::*;
 // pub use validation::*;
 
-/// XlsXpress Python module initialization
+/// `XlsXpress` Python module initialization
 #[pymodule]
 fn xlsxpress(m: &Bound<'_, PyModule>) -> PyResult<()> {
     // Core classes

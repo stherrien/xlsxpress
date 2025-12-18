@@ -436,10 +436,7 @@ mod tests {
         assert_eq!(fmt.get_format_string(), "0.00%");
 
         let fmt = NumberFormat::custom("$#,##0.00_);[Red]($#,##0.00)");
-        assert_eq!(
-            fmt.get_format_string(),
-            "$#,##0.00_);[Red]($#,##0.00)"
-        );
+        assert_eq!(fmt.get_format_string(), "$#,##0.00_);[Red]($#,##0.00)");
     }
 
     /// TDD RED: Test decimal clamping

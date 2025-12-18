@@ -1,15 +1,15 @@
 //! Core Python bindings for Writer and Reader
 
 use crate::writer::Writer;
-use pyo3::prelude::*;
+use calamine::DataType;
 use pyo3::exceptions::PyValueError;
-use calamine::DataType;  // For is_empty() method
+use pyo3::prelude::*; // For is_empty() method
 
 /// Python wrapper for Writer
 #[pyclass(name = "Writer", unsendable)]
 pub struct PyWriter {
-    inner: Option<Writer>,  // Option to allow taking ownership for save()
-    sheet_count: usize,      // Track number of sheets
+    inner: Option<Writer>, // Option to allow taking ownership for save()
+    sheet_count: usize,    // Track number of sheets
 }
 
 #[pymethods]
@@ -25,10 +25,13 @@ impl PyWriter {
 
     /// Add a worksheet
     fn add_worksheet(&mut self, name: &str) -> PyResult<usize> {
-        let writer = self.inner.as_mut()
+        let writer = self
+            .inner
+            .as_mut()
             .ok_or_else(|| PyValueError::new_err("Writer has been consumed by save()"))?;
 
-        writer.add_worksheet(name)
+        writer
+            .add_worksheet(name)
             .map_err(|e| PyValueError::new_err(e.to_string()))?;
 
         let sheet_index = self.sheet_count;
@@ -38,46 +41,67 @@ impl PyWriter {
 
     /// Write a string to a cell
     fn write_string(&mut self, sheet: usize, row: usize, col: usize, value: &str) -> PyResult<()> {
-        let writer = self.inner.as_mut()
+        let writer = self
+            .inner
+            .as_mut()
             .ok_or_else(|| PyValueError::new_err("Writer has been consumed by save()"))?;
 
-        writer.write_string(sheet, row, col, value)
+        writer
+            .write_string(sheet, row, col, value)
             .map_err(|e| PyValueError::new_err(e.to_string()))
     }
 
     /// Write a number to a cell
     fn write_number(&mut self, sheet: usize, row: usize, col: usize, value: f64) -> PyResult<()> {
-        let writer = self.inner.as_mut()
+        let writer = self
+            .inner
+            .as_mut()
             .ok_or_else(|| PyValueError::new_err("Writer has been consumed by save()"))?;
 
-        writer.write_number(sheet, row, col, value)
+        writer
+            .write_number(sheet, row, col, value)
             .map_err(|e| PyValueError::new_err(e.to_string()))
     }
 
     /// Write a boolean to a cell
     fn write_boolean(&mut self, sheet: usize, row: usize, col: usize, value: bool) -> PyResult<()> {
-        let writer = self.inner.as_mut()
+        let writer = self
+            .inner
+            .as_mut()
             .ok_or_else(|| PyValueError::new_err("Writer has been consumed by save()"))?;
 
-        writer.write_boolean(sheet, row, col, value)
+        writer
+            .write_boolean(sheet, row, col, value)
             .map_err(|e| PyValueError::new_err(e.to_string()))
     }
 
     /// Write a formula to a cell
-    fn write_formula(&mut self, sheet: usize, row: usize, col: usize, formula: &str) -> PyResult<()> {
-        let writer = self.inner.as_mut()
+    fn write_formula(
+        &mut self,
+        sheet: usize,
+        row: usize,
+        col: usize,
+        formula: &str,
+    ) -> PyResult<()> {
+        let writer = self
+            .inner
+            .as_mut()
             .ok_or_else(|| PyValueError::new_err("Writer has been consumed by save()"))?;
 
-        writer.write_formula(sheet, row, col, formula)
+        writer
+            .write_formula(sheet, row, col, formula)
             .map_err(|e| PyValueError::new_err(e.to_string()))
     }
 
     /// Write a URL to a cell
     fn write_url(&mut self, sheet: usize, row: usize, col: usize, url: &str) -> PyResult<()> {
-        let writer = self.inner.as_mut()
+        let writer = self
+            .inner
+            .as_mut()
             .ok_or_else(|| PyValueError::new_err("Writer has been consumed by save()"))?;
 
-        writer.write_url(sheet, row, col, url)
+        writer
+            .write_url(sheet, row, col, url)
             .map_err(|e| PyValueError::new_err(e.to_string()))
     }
 
@@ -126,10 +150,13 @@ impl PyWriter {
 
     /// Save the workbook to a file
     fn save(&mut self, path: &str) -> PyResult<()> {
-        let writer = self.inner.take()
+        let writer = self
+            .inner
+            .take()
             .ok_or_else(|| PyValueError::new_err("Writer has already been saved"))?;
 
-        writer.save(path)
+        writer
+            .save(path)
             .map_err(|e| PyValueError::new_err(e.to_string()))
     }
 }
@@ -145,8 +172,8 @@ impl PyReader {
     /// Open an Excel file for reading
     #[staticmethod]
     fn open(path: &str) -> PyResult<Self> {
-        let reader = crate::reader::Reader::open(path)
-            .map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let reader =
+            crate::reader::Reader::open(path).map_err(|e| PyValueError::new_err(e.to_string()))?;
         Ok(Self { inner: reader })
     }
 
@@ -155,9 +182,10 @@ impl PyReader {
         self.inner.sheet_names()
     }
 
-    /// Get a worksheet by name and return its data as a PyWorksheet
+    /// Get a worksheet by name and return its data as a `PyWorksheet`
     fn worksheet(&mut self, name: &str) -> PyResult<PyWorksheet> {
-        let range = self.inner
+        let range = self
+            .inner
             .worksheet_range(name)
             .map_err(|e| PyValueError::new_err(e.to_string()))?;
         Ok(PyWorksheet { range })
@@ -216,11 +244,11 @@ impl PyWorksheet {
     }
 
     /// Iterate over rows
-    fn __iter__(slf: PyRef<'_, Self>) -> PyResult<PyWorksheetIterator> {
-        Ok(PyWorksheetIterator {
+    fn __iter__(slf: PyRef<'_, Self>) -> PyWorksheetIterator {
+        PyWorksheetIterator {
             worksheet: slf.into(),
             current_row: 0,
-        })
+        }
     }
 }
 

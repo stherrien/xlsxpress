@@ -206,7 +206,10 @@ mod tests {
         assert_eq!(coordinate_from_string("B2").unwrap(), (2, 2));
         assert_eq!(coordinate_from_string("Z26").unwrap(), (26, 26));
         assert_eq!(coordinate_from_string("AA100").unwrap(), (100, 27));
-        assert_eq!(coordinate_from_string("XFD1048576").unwrap(), (1048576, 16384));
+        assert_eq!(
+            coordinate_from_string("XFD1048576").unwrap(),
+            (1048576, 16384)
+        );
     }
 
     /// TDD RED: Test invalid coordinates

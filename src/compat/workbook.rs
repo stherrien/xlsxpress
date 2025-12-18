@@ -144,7 +144,11 @@ mod tests {
     #[test]
     fn test_load_workbook() {
         let result = load_workbook("tests/fixtures/test.xlsx");
-        assert!(result.is_ok(), "Failed to load workbook: {:?}", result.err());
+        assert!(
+            result.is_ok(),
+            "Failed to load workbook: {:?}",
+            result.err()
+        );
     }
 
     /// TDD RED: Test load_workbook fails for non-existent file
