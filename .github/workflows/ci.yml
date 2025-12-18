@@ -59,9 +59,8 @@ jobs:
         run: |
           export PYO3_PYTHON=$(which python3)
           if [ "$RUNNER_OS" == "macOS" ]; then
-            PYTHON_LIB=$(python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
-            export DYLD_LIBRARY_PATH="${PYTHON_LIB}:$DYLD_LIBRARY_PATH"
-            export RUSTFLAGS="-L ${PYTHON_LIB}"
+            PYTHON_LDFLAGS=$(python3-config --ldflags --embed 2>/dev/null || python3-config --ldflags)
+            export RUSTFLAGS="${PYTHON_LDFLAGS}"
           fi
           cargo clippy --all-targets --all-features -- -D warnings
         shell: bash
@@ -73,9 +72,8 @@ jobs:
         run: |
           export PYO3_PYTHON=$(which python3)
           if [ "$RUNNER_OS" == "macOS" ]; then
-            PYTHON_LIB=$(python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
-            export DYLD_LIBRARY_PATH="${PYTHON_LIB}:$DYLD_LIBRARY_PATH"
-            export RUSTFLAGS="-L ${PYTHON_LIB}"
+            PYTHON_LDFLAGS=$(python3-config --ldflags --embed 2>/dev/null || python3-config --ldflags)
+            export RUSTFLAGS="${PYTHON_LDFLAGS}"
           fi
           maturin build --release
         shell: bash
@@ -106,9 +104,8 @@ jobs:
         run: |
           export PYO3_PYTHON=$(which python3)
           if [ "$RUNNER_OS" == "macOS" ]; then
-            PYTHON_LIB=$(python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
-            export DYLD_LIBRARY_PATH="${PYTHON_LIB}:$DYLD_LIBRARY_PATH"
-            export RUSTFLAGS="-L ${PYTHON_LIB}"
+            PYTHON_LDFLAGS=$(python3-config --ldflags --embed 2>/dev/null || python3-config --ldflags)
+            export RUSTFLAGS="${PYTHON_LDFLAGS}"
           fi
           cargo test --verbose --lib
         shell: bash
@@ -117,9 +114,8 @@ jobs:
         run: |
           export PYO3_PYTHON=$(which python3)
           if [ "$RUNNER_OS" == "macOS" ]; then
-            PYTHON_LIB=$(python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
-            export DYLD_LIBRARY_PATH="${PYTHON_LIB}:$DYLD_LIBRARY_PATH"
-            export RUSTFLAGS="-L ${PYTHON_LIB}"
+            PYTHON_LDFLAGS=$(python3-config --ldflags --embed 2>/dev/null || python3-config --ldflags)
+            export RUSTFLAGS="${PYTHON_LDFLAGS}"
           fi
           cargo test --doc
         shell: bash
@@ -166,9 +162,8 @@ jobs:
         run: |
           export PYO3_PYTHON=$(which python3)
           if [ "$RUNNER_OS" == "macOS" ]; then
-            PYTHON_LIB=$(python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
-            export DYLD_LIBRARY_PATH="${PYTHON_LIB}:$DYLD_LIBRARY_PATH"
-            export RUSTFLAGS="-L ${PYTHON_LIB}"
+            PYTHON_LDFLAGS=$(python3-config --ldflags --embed 2>/dev/null || python3-config --ldflags)
+            export RUSTFLAGS="${PYTHON_LDFLAGS}"
           fi
           maturin build --release
         shell: bash
