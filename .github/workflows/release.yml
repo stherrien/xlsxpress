@@ -28,7 +28,7 @@ jobs:
             platform: linux
 
           # macOS builds (native builds for both architectures)
-          - os: macos-13  # Intel
+          - os: macos-15-intel  # Intel
             target: x86_64
             platform: macos
           - os: macos-latest  # Apple Silicon (M1+)
