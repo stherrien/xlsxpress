@@ -1,0 +1,101 @@
+name: Test Release Build
+
+# Manual workflow for testing release builds without publishing
+on:
+  workflow_dispatch:
+    inputs:
+      python-version:
+        description: 'Python version to test'
+        required: false
+        default: '3.12'
+
+jobs:
+  test-build:
+    name: Test build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version || '3.12' }}
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install maturin
+        run: pip install maturin[patchelf]
+
+      - name: Build wheel
+        run: maturin build --release
+
+      - name: List built artifacts
+        shell: bash
+        run: ls -lh target/wheels/
+
+      - name: Install built wheel
+        shell: bash
+        run: |
+          pip install target/wheels/*.whl
+
+      - name: Test import
+        run: python -c "import xlsxpress; print(f'Successfully imported xlsxpress')"
+
+      - name: Run smoke tests
+        shell: bash
+        run: |
+          python -c "
+          import xlsxpress
+
+          # Test Writer
+          writer = xlsxpress.Writer()
+          sheet_idx = writer.add_worksheet('Sheet1')
+          writer.write_string(sheet_idx, 0, 0, 'Hello World')
+          writer.write_number(sheet_idx, 1, 0, 42)
+          writer.write_boolean(sheet_idx, 2, 0, True)
+          writer.write_formula(sheet_idx, 3, 0, '=A2*2')
+          writer.save('test_smoke.xlsx')
+
+          # Test with styles
+          from xlsxpress import Font, Fill, Style
+          font = Font().name('Arial').size(14.0).bold(True)
+          fill = Fill.solid('#FFFF00')
+          style = Style().font(font).fill(fill)
+          writer2 = xlsxpress.Writer()
+          sheet_idx2 = writer2.add_worksheet('Styled')
+          writer2.write_string_with_style(sheet_idx2, 0, 0, 'Styled Text', style)
+          writer2.save('test_styled.xlsx')
+
+          # Test with charts
+          from xlsxpress import LineChart, DataSeries, ChartPosition
+          chart = LineChart().title('Test Chart')
+          series = DataSeries('Sheet1!\$A\$1:\$A\$10').name('Data')
+          chart = chart.add_series(series)
+          position = ChartPosition(5, 2).width(640).height(480)
+          chart = chart.position(position)
+          writer3 = xlsxpress.Writer()
+          sheet_idx3 = writer3.add_worksheet('ChartSheet')
+          for i in range(10):
+              writer3.write_number(sheet_idx3, i, 0, i * 10)
+          writer3.insert_line_chart(sheet_idx3, chart)
+          writer3.save('test_chart.xlsx')
+
+          print('All smoke tests passed!')
+          "
+
+      - name: Clean up test files
+        shell: bash
+        run: |
+          rm -f test_smoke.xlsx test_styled.xlsx test_chart.xlsx
+
+      - name: Upload wheel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-wheel-${{ matrix.os }}
+          path: target/wheels/*.whl
+          retention-days: 7

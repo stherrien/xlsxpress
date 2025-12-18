@@ -1,0 +1,122 @@
+# Rust
+/target/
+**/*.rs.bk
+*.pdb
+Cargo.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# PyCharm
+.idea/
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage/
+*.cover
+.hypothesis/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ruff
+.ruff_cache/
+
+# Documentation
+docs/_build/
+site/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+endef
+Desktop.ini
+$RECYCLE.BIN/
+
+# Temporary files
+*.swp
+*.swo
+*.tmp
+*.bak
+*.orig
+
+# Benchmarks
+target/criterion/
+
+# Development
+.pre-commit-config.yaml.swp
+
+# Maturin build artifacts
+python/xlsxpress/*.so
+python/xlsxpress/*.pyd
+python/xlsxpress/*.dylib
+python/xlsxpress/*.dll
+
+# Test output
+/tests/output/
+/tests/temp/
+*.xlsx
+!tests/fixtures/*.xlsx
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Rust-analyzer
+rust-project.json
+
+# Logs
+*.log
+
+# Summary files (optional - generated during development)
+/tmp/reader_summary.md
