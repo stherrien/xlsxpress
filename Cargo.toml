@@ -1,0 +1,70 @@
+[package]
+name = "xlsxpress"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+authors = ["XlsXpress Contributors"]
+description = "High-performance Excel processing library built with Rust"
+repository = "https://github.com/yourusername/xlsxpress"
+license = "MIT"
+keywords = ["excel", "xlsx", "spreadsheet", "calamine", "python"]
+categories = ["parser-implementations", "encoding", "data-structures"]
+
+[lib]
+name = "xlsxpress"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# PyO3 for Python bindings
+pyo3 = { version = "0.20", features = ["extension-module", "abi3-py310"] }
+
+# Excel reading
+calamine = { version = "0.24", features = ["dates"] }
+
+# Excel writing
+rust_xlsxwriter = "0.64"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Date/time handling
+chrono = { version = "0.4", features = ["serde"] }
+
+# Parallel processing
+rayon = "1.8"
+
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+[dev-dependencies]
+# Testing
+proptest = "1.4"  # Property-based testing
+criterion = "0.5"  # Benchmarking
+tempfile = "3.8"   # Temporary files for tests
+
+[profile.release]
+# Optimize for performance
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+
+[profile.dev]
+# Faster compile times for development
+opt-level = 0
+
+[profile.test]
+# Balance between compile time and test performance
+opt-level = 1
+
+# Benchmarking profile
+# TODO: Uncomment when benchmark files are created
+# [[bench]]
+# name = "read_benchmark"
+# harness = false
+#
+# [[bench]]
+# name = "write_benchmark"
+# harness = false
