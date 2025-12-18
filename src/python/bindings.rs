@@ -6,7 +6,7 @@ use pyo3::exceptions::PyValueError;
 use calamine::DataType;  // For is_empty() method
 
 /// Python wrapper for Writer
-#[pyclass(name = "Writer")]
+#[pyclass(name = "Writer", unsendable)]
 pub struct PyWriter {
     inner: Option<Writer>,  // Option to allow taking ownership for save()
     sheet_count: usize,      // Track number of sheets
@@ -241,7 +241,7 @@ impl PyWorksheetIterator {
         let current_row = slf.current_row;
 
         // Scope the borrow to just this block
-        let (rows, cols, row_data) = {
+        let (_rows, _cols, row_data) = {
             let worksheet = slf.worksheet.borrow(py);
             let (rows, cols) = worksheet.range.get_size();
 

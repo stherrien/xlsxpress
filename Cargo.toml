@@ -16,7 +16,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 # PyO3 for Python bindings
-pyo3 = { version = "0.20", features = ["extension-module", "abi3-py310"] }
+pyo3 = { version = "0.24", features = ["extension-module", "abi3-py310"] }
 
 # Excel reading
 calamine = { version = "0.24", features = ["dates"] }

@@ -17,7 +17,7 @@ use pyo3::prelude::*;
 
 /// XlsXpress Python module initialization
 #[pymodule]
-fn xlsxpress(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+fn xlsxpress(m: &Bound<'_, PyModule>) -> PyResult<()> {
     // Core classes
     m.add_class::<bindings::PyWriter>()?;
     m.add_class::<bindings::PyReader>()?;
