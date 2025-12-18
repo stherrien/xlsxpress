@@ -22,19 +22,16 @@ jobs:
     strategy:
       matrix:
         include:
-          # Linux builds
+          # Linux builds (x86_64 only - aarch64 requires complex cross-compilation)
           - os: ubuntu-latest
             target: x86_64
-            platform: linux
-          - os: ubuntu-latest
-            target: aarch64
             platform: linux
 
-          # macOS builds
-          - os: macos-latest
+          # macOS builds (native builds for both architectures)
+          - os: macos-13  # Intel
             target: x86_64
             platform: macos
-          - os: macos-latest
+          - os: macos-latest  # Apple Silicon (M1+)
             target: aarch64
             platform: macos
 
@@ -64,7 +61,6 @@ jobs:
           args: --release --out dist --find-interpreter
           sccache: 'true'
           manylinux: auto
-          container: off
 
       - name: Build wheels (macOS)
         if: matrix.platform == 'macos'
