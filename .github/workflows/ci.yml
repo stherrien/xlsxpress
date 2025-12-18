@@ -57,12 +57,16 @@ jobs:
 
       - name: Run clippy
         run: cargo clippy --all-targets --all-features -- -D warnings
+        env:
+          PYO3_PYTHON: python3
 
       - name: Install maturin for fixtures
         run: pip install maturin
 
       - name: Build for test fixtures
         run: maturin build --release
+        env:
+          PYO3_PYTHON: python3
 
       - name: Install for test fixtures
         run: |
@@ -84,12 +88,17 @@ jobs:
           w.write_number(s, 2, 1, 100.0)
           w.save('tests/fixtures/test.xlsx')
           "
+        shell: bash
 
       - name: Run tests
         run: cargo test --verbose --lib
+        env:
+          PYO3_PYTHON: python3
 
       - name: Run doc tests
         run: cargo test --doc
+        env:
+          PYO3_PYTHON: python3
 
   # Python tests
   python-test:
@@ -131,6 +140,8 @@ jobs:
 
       - name: Build Python wheel
         run: maturin build --release
+        env:
+          PYO3_PYTHON: python3
 
       - name: Install built wheel
         run: python -m pip install --find-links=target/wheels xlsxpress
@@ -154,6 +165,7 @@ jobs:
           w.save('tests/fixtures/test.xlsx')
           print('✓ Test fixture created')
           "
+        shell: bash
 
       - name: Run Python tests
         run: pytest tests/python -v --cov=xlsxpress --cov-report=xml
