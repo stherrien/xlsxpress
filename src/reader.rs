@@ -153,7 +153,7 @@ mod tests {
 
     /// TDD RED: Test that we can open an Excel file
     ///
-    /// This test will fail initially because Reader::open() returns an error.
+    /// This test will fail initially because `Reader::open()` returns an error.
     /// Following TDD, we write the test FIRST, watch it fail, then implement.
     #[test]
     fn test_open_xlsx_file() {
@@ -282,7 +282,10 @@ mod tests {
         // Assert: Should read 3.14
         assert!(value.is_some());
         let val = value.unwrap();
-        assert!((val - 3.14).abs() < 0.001, "Expected 3.14, got {}", val);
+        #[allow(clippy::approx_constant)]
+        {
+            assert!((val - 3.14).abs() < 0.001, "Expected 3.14, got {val}");
+        }
     }
 
     /// TDD RED: Test reading an empty cell
@@ -310,7 +313,7 @@ mod tests {
         let (rows, cols) = reader.get_dimensions(&range);
 
         // Assert: Should have at least 2 rows and 2 columns
-        assert!(rows >= 2, "Should have at least 2 rows, got {}", rows);
-        assert!(cols >= 2, "Should have at least 2 columns, got {}", cols);
+        assert!(rows >= 2, "Should have at least 2 rows, got {rows}");
+        assert!(cols >= 2, "Should have at least 2 columns, got {cols}");
     }
 }

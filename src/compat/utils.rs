@@ -208,7 +208,7 @@ mod tests {
         assert_eq!(coordinate_from_string("AA100").unwrap(), (100, 27));
         assert_eq!(
             coordinate_from_string("XFD1048576").unwrap(),
-            (1048576, 16384)
+            (1_048_576, 16384)
         );
     }
 
@@ -230,7 +230,7 @@ mod tests {
         assert_eq!(coordinate_to_string(2, 2), "B2");
         assert_eq!(coordinate_to_string(26, 26), "Z26");
         assert_eq!(coordinate_to_string(100, 27), "AA100");
-        assert_eq!(coordinate_to_string(1048576, 16384), "XFD1048576");
+        assert_eq!(coordinate_to_string(1_048_576, 16384), "XFD1048576");
     }
 
     /// TDD RED: Test round-trip conversion

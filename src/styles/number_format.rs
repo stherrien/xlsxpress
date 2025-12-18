@@ -366,7 +366,7 @@ mod tests {
         let fmt = NumberFormat::accounting(2);
         assert_eq!(*fmt.get_format_type(), NumberFormatType::Accounting);
         assert_eq!(fmt.get_decimals(), Some(2));
-        assert!(fmt.get_format_string().contains("$"));
+        assert!(fmt.get_format_string().contains('$'));
     }
 
     /// TDD RED: Test date format

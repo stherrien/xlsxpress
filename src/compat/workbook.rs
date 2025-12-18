@@ -140,7 +140,7 @@ pub fn load_workbook<P: AsRef<Path>>(path: P) -> Result<Workbook> {
 mod tests {
     use super::*;
 
-    /// TDD RED: Test load_workbook opens existing file
+    /// TDD RED: Test `load_workbook` opens existing file
     #[test]
     fn test_load_workbook() {
         let result = load_workbook("tests/fixtures/test.xlsx");
@@ -151,7 +151,7 @@ mod tests {
         );
     }
 
-    /// TDD RED: Test load_workbook fails for non-existent file
+    /// TDD RED: Test `load_workbook` fails for non-existent file
     #[test]
     fn test_load_workbook_nonexistent() {
         let result = load_workbook("tests/fixtures/nonexistent.xlsx");
@@ -168,7 +168,7 @@ mod tests {
         assert_eq!(names[0], "Sheet1");
     }
 
-    /// TDD RED: Test get_sheet_by_name returns worksheet
+    /// TDD RED: Test `get_sheet_by_name` returns worksheet
     #[test]
     fn test_workbook_get_sheet_by_name() {
         let mut wb = load_workbook("tests/fixtures/test.xlsx").unwrap();
@@ -179,7 +179,7 @@ mod tests {
         assert_eq!(ws.title(), "Sheet1");
     }
 
-    /// TDD RED: Test get_sheet_by_name fails for non-existent sheet
+    /// TDD RED: Test `get_sheet_by_name` fails for non-existent sheet
     #[test]
     fn test_workbook_get_sheet_nonexistent() {
         let mut wb = load_workbook("tests/fixtures/test.xlsx").unwrap();
@@ -199,7 +199,7 @@ mod tests {
         assert_eq!(ws.title(), "Sheet1");
     }
 
-    /// TDD RED: Test get_sheet_by_index
+    /// TDD RED: Test `get_sheet_by_index`
     #[test]
     fn test_workbook_get_sheet_by_index() {
         let mut wb = load_workbook("tests/fixtures/test.xlsx").unwrap();
@@ -210,7 +210,7 @@ mod tests {
         assert_eq!(ws.title(), "Sheet1");
     }
 
-    /// TDD RED: Test get_sheet_by_index fails for out of bounds
+    /// TDD RED: Test `get_sheet_by_index` fails for out of bounds
     #[test]
     fn test_workbook_get_sheet_by_index_out_of_bounds() {
         let mut wb = load_workbook("tests/fixtures/test.xlsx").unwrap();

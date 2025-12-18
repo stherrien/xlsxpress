@@ -170,11 +170,11 @@ mod tests {
         let cell2 = Cell::new(100, 27, "AA100");
         assert_eq!(cell2.coordinate(), "AA100");
 
-        let cell3 = Cell::new(1048576, 16384, "Max");
+        let cell3 = Cell::new(1_048_576, 16384, "Max");
         assert_eq!(cell3.coordinate(), "XFD1048576");
     }
 
-    /// TDD RED: Test CellValue Display trait
+    /// TDD RED: Test `CellValue` Display trait
     #[test]
     fn test_cell_value_display() {
         assert_eq!(CellValue::String("test".to_string()).to_string(), "test");

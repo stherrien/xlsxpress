@@ -119,7 +119,13 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install maturin
-        run: pip install maturin[patchelf]
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            pip install maturin[patchelf]
+          else
+            pip install maturin
+          fi
+        shell: bash
 
       - name: Build Python wheel
         run: maturin build --release

@@ -206,7 +206,7 @@ mod tests {
             CalCell::new((0, 1), Data::Float(42.0)),
             CalCell::new((0, 2), Data::Bool(true)),
             CalCell::new((1, 0), Data::String("World".to_string())),
-            CalCell::new((1, 1), Data::Float(3.14)),
+            CalCell::new((1, 1), Data::Float(3.15)),
             CalCell::new((1, 2), Data::Bool(false)),
         ];
 
@@ -267,7 +267,7 @@ mod tests {
         // Test B2
         let cell = ws.get_cell("B2").unwrap();
         assert_eq!(cell.coordinate(), "B2");
-        assert_eq!(cell.value(), &CellValue::Number(3.14));
+        assert_eq!(cell.value(), &CellValue::Number(3.15));
     }
 
     /// TDD RED: Test invalid cell access
@@ -315,7 +315,7 @@ mod tests {
 
         // Check second row values
         assert_eq!(rows[1][0].value(), &CellValue::String("World".to_string()));
-        assert_eq!(rows[1][1].value(), &CellValue::Number(3.14));
+        assert_eq!(rows[1][1].value(), &CellValue::Number(3.15));
         assert_eq!(rows[1][2].value(), &CellValue::Boolean(false));
     }
 
