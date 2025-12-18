@@ -56,17 +56,25 @@ jobs:
         run: cargo fmt -- --check
 
       - name: Run clippy
-        run: cargo clippy --all-targets --all-features -- -D warnings
-        env:
-          PYO3_PYTHON: python3
+        run: |
+          export PYO3_PYTHON=$(which python3)
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            export DYLD_LIBRARY_PATH=$(python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))"):$DYLD_LIBRARY_PATH
+          fi
+          cargo clippy --all-targets --all-features -- -D warnings
+        shell: bash
 
       - name: Install maturin for fixtures
         run: pip install maturin
 
       - name: Build for test fixtures
-        run: maturin build --release
-        env:
-          PYO3_PYTHON: python3
+        run: |
+          export PYO3_PYTHON=$(which python3)
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            export DYLD_LIBRARY_PATH=$(python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))"):$DYLD_LIBRARY_PATH
+          fi
+          maturin build --release
+        shell: bash
 
       - name: Install for test fixtures
         run: |
@@ -91,14 +99,22 @@ jobs:
         shell: bash
 
       - name: Run tests
-        run: cargo test --verbose --lib
-        env:
-          PYO3_PYTHON: python3
+        run: |
+          export PYO3_PYTHON=$(which python3)
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            export DYLD_LIBRARY_PATH=$(python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))"):$DYLD_LIBRARY_PATH
+          fi
+          cargo test --verbose --lib
+        shell: bash
 
       - name: Run doc tests
-        run: cargo test --doc
-        env:
-          PYO3_PYTHON: python3
+        run: |
+          export PYO3_PYTHON=$(which python3)
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            export DYLD_LIBRARY_PATH=$(python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))"):$DYLD_LIBRARY_PATH
+          fi
+          cargo test --doc
+        shell: bash
 
   # Python tests
   python-test:
@@ -139,9 +155,13 @@ jobs:
         shell: bash
 
       - name: Build Python wheel
-        run: maturin build --release
-        env:
-          PYO3_PYTHON: python3
+        run: |
+          export PYO3_PYTHON=$(which python3)
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            export DYLD_LIBRARY_PATH=$(python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))"):$DYLD_LIBRARY_PATH
+          fi
+          maturin build --release
+        shell: bash
 
       - name: Install built wheel
         run: python -m pip install --find-links=target/wheels xlsxpress
@@ -163,7 +183,7 @@ jobs:
           w.write_string(s, 2, 0, 'Test')
           w.write_number(s, 2, 1, 100.0)
           w.save('tests/fixtures/test.xlsx')
-          print('✓ Test fixture created')
+          print('Test fixture created successfully')
           "
         shell: bash
 
